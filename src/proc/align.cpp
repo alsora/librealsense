@@ -10,6 +10,9 @@
 #include "environment.h"
 #include "align.h"
 #include "stream.h"
+#include <iostream>
+#include <chrono>
+#include <thread>
 
 namespace librealsense
 {
@@ -155,6 +158,12 @@ namespace librealsense
             return it->second;
         }
         auto aligned_profile = std::make_shared<rs2::video_stream_profile>(original_profile.clone(original_profile.stream_type(), original_profile.stream_index(), original_profile.format()));
+        std::cout<<"Aligned profile "<< (aligned_profile != nullptr)<<std::endl;
+        std::cout<<"Internal profile "<< (aligned_profile->get() != nullptr)<<std::endl;
+        std::cout<<"internal internal profile "<< (aligned_profile->get()->profile != nullptr)<<std::endl;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
         aligned_profile->get()->profile->set_framerate(original_profile.fps());
         if (auto original_video_profile = As<video_stream_profile_interface>(original_profile.get()->profile))
         {
